@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday KAWAN JOMOK</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        /* Envelope Animation */
+        .envelope {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 200px;
+            background: #f8e8e8;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.5s ease;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ffb6c1;
+            transform-origin: top;
+            transform: rotateX(0deg);
+            transition: all 0.5s ease 0.5s;
+        }
+
+        .envelope:hover:before {
+            transform: rotateX(180deg);
+        }
+
+        .envelope:hover {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .envelope-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 24px;
+            color: #d23669;
+            z-index: 10;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 0.5s;
+        }
+
+        /* Card Styles */
+        .card {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            min-height: 400px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            transform: scale(0);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            display: none;
+        }
+
+        .card.active {
+            transform: scale(1);
+            display: block;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: #d23669;
+            margin-bottom: 10px;
+        }
+
+        .heart {
+            font-size: 2rem;
+            color: #ff4757;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+        }
+
+        /* Message Section */
+        .message {
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            text-align: justify;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            text-align: right;
+            margin-top: 20px;
+            color: #d23669;
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .photo-frame {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.1) rotate(5deg);
+            z-index: 10;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-frame:hover img {
+            transform: scale(1.2);
+        }
+
+        /* Floating Hearts */
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 105, 180, 0.8);
+            animation: floatUp 5s linear infinite;
+            opacity: 0;
+        }
+
+        /* Music Player */
+        .music-player {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .play-btn {
+            background: #d23669;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(210, 54, 105, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: #ff4757;
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .photo-frame {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Envelope -->
+    <div class="envelope">
+        <div class="envelope-text">
+            Click to Open<br>💌
+        </div>
+    </div>
+
+    <!-- Birthday Card -->
+    <div class="card">
+        <div class="floating-hearts" id="hearts-container"></div>
+
+        <div class="card-header">
+            <h1>Happy Birthday <span class="heart">❤</span></h1>
+            <p>To the most special person in my life</p>
+        </div>
+
+        <div class="message">
+            <p>MY KAWAN JOKOK</p>
+            <p>TOBATLAH KAWAN, JAUHILAH PERBUATAN BURUK ITU</p>
+            <p>KARNA NGACENG AKAN MENGHANCURKAN HIDUP MU TANPA KAU KETAHUI, INGATLAH TUHAN MU KAWAN</p>
+            <p>HAPUSLAH STIKER MUKA KU NKAWAN KARNA ITU TIDAK MEMBAWA KEBERKAHAN DI DALAM GRUP</p>
+            <p>SOLAT LAHHHH</p>
+            <p>Forever yours,</p>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="photo-gallery">
+            <div class="photo-frame">
+                <img src="Cuplikan layar 2024-09-16 155922.png"
+                    alt="Couple smiling at sunset on a beach with golden light" />
+            </div>
+            <div class="photo-frame">
+                <img src="Cuplikan layar 2024-09-16 155922.png" alt="Romantic dinner with candles and rose petals" />
+            </div>
+            <div class="photo-frame">
+                <img src="Cuplikan layar 2024-09-16 155922.png"
+                    alt="Close-up of hands intertwined with matching bracelets" />
+            </div>
+            <div class="photo-frame">
+                <img src="Cuplikan layar 2024-09-16 155922.png" alt="Couple dancing under string lights in a garden" />
+            </div>
+        </div>
+
+        <div class="signature">
+            With all my love ❤
+        </div>
+
+        <!-- Music Player -->
+        <div class="music-player">
+            <button class="play-btn" id="playBtn">♫</button>
+            <audio id="bgMusic" loop>
+                <source src="Aziz Hedra - Somebody's Pleasure (Extended Version) (256).mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confetti"></div>
+
+    <script>
+        // Open Envelope
+        const envelope = document.querySelector('.envelope');
+        const card = document.querySelector('.card');
+        let musicPlaying = false;
+
+        envelope.addEventListener('click', function () {
+            // Animate envelope opening
+            this.style.transform = 'translate(-50%, -50%) rotateY(180deg) scale(0.5)';
+            this.style.opacity = '0';
+
+            // Show card after delay
+            setTimeout(() => {
+                this.style.display = 'none';
+                card.classList.add('active');
+                createHearts();
+                startConfetti();
+            }, 1000);
+        });
+
+        // Floating Hearts Animation
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts-container');
+
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-particle');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // Music Player
+        const playBtn = document.getElementById('playBtn');
+        const bgMusic = document.getElementById('bgMusic');
+
+        playBtn.addEventListener('click', function () {
+            if (musicPlaying) {
+                bgMusic.pause();
+                playBtn.textContent = '♫';
+            } else {
+                bgMusic.play();
+                playBtn.textContent = '❚❚';
+            }
+            musicPlaying = !musicPlaying;
+        });
+
+        // Confetti Animation
+        function startConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+
+            // Create confetti elements
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.borderRadius = '50%';
+
+                // Animation
+                const animationDuration = Math.random() * 5 + 3;
+                confetti.style.animation = `fall ${animationDuration}s linear infinite`;
+
+                // Add to container
+                confettiContainer.appendChild(confetti);
+
+                // Create keyframes dynamically
+                const keyframes = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) translateX(${Math.random() * 200 - 100}px) rotate(${Math.random() * 360}deg);
+                    }
+                }`;
+
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document.head.appendChild(style);
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['#ff4757', '#ff6b81', '#ff8da1', '#ffa502', '#ff6348', '#2ed573', '#1e90ff', '#5352ed'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
+</body>
+
+</html>
